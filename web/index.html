@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+	initial-scale=1.0">
+    <style>
+        body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            background-color: black;
+            margin-bottom: 1rem;
+        }
+
+        #error {
+            color: red;
+            padding: 0.6rem;
+            background-color: rgb(236 157 157);
+            margin-bottom: 0.6rem;
+            display: none;
+        }
+    </style>
+    <title>GetUserMedia demo</title>
+</head>
+
+<body>
+<h1> WebRTC getUserMedia() demo</h1>
+
+<!-- If you use the playsinline attribute then
+the video is played "inline". If you omit this
+attribute then it works normal in the desktop
+browsers, but for the mobile browsers, the video
+takes the fullscreen by default. And don't forget
+to use the autoplay attribute-->
+<video id='video'
+       width="600"
+       height="300"
+       autoplay playsinline>
+    Sorry, video element not supported in your browser
+</video>
+<div id="error"></div>
+<button onclick="openCamera()"> Open Camera</button>
+<script>
+    const videoElem = document.getElementById('video');
+    const errorElem = document.getElementById('error');
+    //Declare the MediaStreamConstraints object
+    const constraints = {
+        audio: true,
+        video: true
+    }
+
+    function openCamera() {
+//Ask the User for the access of the device camera and microphone
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(mediaStream => {
+                /* The received mediaStream contains both the
+                video and audio media data*/
+
+                /*Add the mediaStream directly to the source of the video element
+                                    using the srcObject attribute*/
+                videoElem.srcObject = mediaStream;
+
+            }).catch(err => {
+            // handling the error if any
+            errorElem.innerHTML = err;
+            errorElem.style.display = "block";
+        });
+
+    }
+</script>
+</body>
+
+</html>
